@@ -3,8 +3,8 @@
 
 import os
 
-from flask_api import create_app
-from flask_api.config import SQLITE_DEV, SQLITE_PROD, SQLITE_TEST
+from flask_api_boilerplate import create_app
+from flask_api_boilerplate.config import SQLITE_DEV, SQLITE_PROD, SQLITE_TEST
 
 
 def test_config_development():

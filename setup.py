@@ -27,9 +27,7 @@ INSTALL_REQUIRES = [
     "python-dotenv",
     "requests",
     "urllib3",
-
     "werkzeug",
-
 ]
 EXTRAS_REQUIRE = {
     "dev": [
@@ -48,7 +46,7 @@ EXTRAS_REQUIRE = {
 }
 
 setup(
-    name="flask-api-tutorial",
+    name="flask_api_boilerplate",
     description=DESCRIPTION,
     long_description=README,
     long_description_content_type="text/markdown",
