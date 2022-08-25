@@ -127,3 +127,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+src/flask_api_boilerplate/flask_api_tutorial_test.db

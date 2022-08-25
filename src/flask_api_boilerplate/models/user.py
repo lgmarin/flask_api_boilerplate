@@ -6,6 +6,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 import jwt
 
 from flask_api_boilerplate import db, bcrypt
+from flask_api_boilerplate.utils.result import Result
 from flask_api_boilerplate.utils.datetime import (
     utc_now,
     get_local_utcoffset,
@@ -74,3 +75,33 @@ class User(db.Model):
         key = current_app.config.get("SECRET_KEY")
 
         return jwt.encode(payload, key, algorithm="HS256")
+
+    @staticmethod
+    def decode_access_token(access_token: str):
+        if isinstance(access_token, bytes):
+            access_token = access_token.decode("ascii")
+
+        if access_token.startswith("Bearer "):
+            split = access_token.split("Bearer ")
+            access_token = split[1].strip()
+
+        try:
+            key = current_app.config.get("SECRET_KEY")
+            payload = jwt.decode(access_token, key, algorithms=["HS256"])
+
+        except jwt.ExpiredSignatureError:
+            error = "Access token expired. Login again to renew."
+            return Result.Fail(error)
+
+        except jwt.InvalidTokenError:
+            error = "Invalid token."
+            return Result.Fail(error)
+
+        user_dict = dict(
+            public_id=payload["sub"],
+            admin=payload["admin"],
+            token=access_token,
+            expires_at=payload["exp"],
+        )
+
+        return Result.Ok(user_dict)
