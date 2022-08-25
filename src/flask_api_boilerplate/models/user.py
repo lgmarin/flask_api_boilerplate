@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import timezone
 from uuid import uuid4
 
 from flask import current_app
@@ -49,3 +49,11 @@ class User(db.Model):
             self.registered_on, use_tz=timezone.utc, localize=False
         )
         return localized_dt_string(registered_on_utc, use_tz=get_local_utcoffset())
+
+    @classmethod
+    def find_by_email(cls, email: str):
+        return cls.query.filter_by(email=email).first()
+
+    @classmethod
+    def find_by_public_id(cls, public_id: str):
+        return cls.query.filter_by(public_id=public_id).first()
