@@ -1,8 +1,9 @@
-from datetime import timezone
+from datetime import timezone, datetime, timedelta
 from uuid import uuid4
 
 from flask import current_app
 from sqlalchemy.ext.hybrid import hybrid_property
+import jwt
 
 from flask_api_boilerplate import db, bcrypt
 from flask_api_boilerplate.utils.datetime import (
@@ -57,3 +58,19 @@ class User(db.Model):
     @classmethod
     def find_by_public_id(cls, public_id: str):
         return cls.query.filter_by(public_id=public_id).first()
+
+    def encode_access_token(self) -> str:
+        now = datetime.now(timezone.utc)
+
+        token_age_h = current_app.config.get("TOKEN_EXPIRE_HOURS")
+        token_age_m = current_app.config.get("TOKEN_EXPIRE_MINUTES")
+
+        expires_at = now + timedelta(hours=token_age_h, minutes=token_age_m)
+
+        if current_app.config["TESTING"]:
+            expires_at = now + timedelta(seconds=5)
+
+        payload = dict(exp=expires_at, iat=now, sub=self.public_id, admin=self.admin)
+        key = current_app.config.get("SECRET_KEY")
+
+        return jwt.encode(payload, key, algorithm="HS256")
