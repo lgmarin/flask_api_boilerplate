@@ -18,10 +18,10 @@ def db(app, client, request):
     database.create_all()
     database.session.commit()
 
-    def close():
+    def finish():
         database.session.remove()
 
-    request.addfinalizer(close)
+    request.addfinalizer(finish)
     return database
 
 
