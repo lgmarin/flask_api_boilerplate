@@ -16,18 +16,18 @@ PROJECT_URLS = {
     "Source Code": "https://github.com/a-luna/flask-api-tutorial",
 }
 INSTALL_REQUIRES = [
-    "Flask",
     "Flask-Bcrypt",
     "Flask-Cors",
     "Flask-Migrate",
-    "flask-restx",
     "Flask-SQLAlchemy",
     "PyJWT",
     "python-dateutil",
     "python-dotenv",
     "requests",
     "urllib3",
-    "werkzeug",
+    "Werkzeug <= 2.1.2",
+    "Flask == 2.1.2",
+    "flask-restx >= 0.5.1",
 ]
 EXTRAS_REQUIRE = {
     "dev": [
