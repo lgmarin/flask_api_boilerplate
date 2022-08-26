@@ -19,6 +19,11 @@ def create_app(config_name):
     app = Flask("flask_api")
     app.config.from_object(get_config(config_name))
 
+    """Register Blueprints"""
+    from flask_api_boilerplate.api import api_blueprint
+
+    app.register_blueprint(api_blueprint)
+
     cors.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
