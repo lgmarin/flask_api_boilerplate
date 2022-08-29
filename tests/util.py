@@ -1,7 +1,8 @@
 from flask import url_for
 
 EMAIL = "testuser@testmail.com"
-PASSWORD = "teste123"
+PASSWORD = "123456789"
+BAD_REQUEST = "Input payload validation failed"
 
 
 def register_user(test_client, email=EMAIL, password=PASSWORD):
