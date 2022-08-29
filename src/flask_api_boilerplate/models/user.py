@@ -60,7 +60,7 @@ class User(db.Model):
     def find_by_public_id(cls, public_id: str):
         return cls.query.filter_by(public_id=public_id).first()
 
-    def encode_access_token(self) -> str:
+    def encode_access_token(self):
         now = datetime.now(timezone.utc)
 
         token_age_h = current_app.config.get("TOKEN_EXPIRE_HOURS")

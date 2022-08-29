@@ -16,10 +16,11 @@ def process_registration_request(email: str, password: str):
     db.session.commit()
 
     access_token = new_user.encode_access_token()
+
     response = jsonify(
         status="success",
         message="successfully registered",
-        access_token=access_token.decode(),
+        access_token=access_token,
         token_type="bearer",
         expires_in=_get_token_expire_time(),
     )
