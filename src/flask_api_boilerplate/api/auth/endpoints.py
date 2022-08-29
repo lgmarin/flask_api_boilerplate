@@ -25,7 +25,7 @@ class RegisterUser(Resource):
         int(HTTPStatus.INTERNAL_SERVER_ERROR), "Something went wrong with the server!"
     )
     def post(self):
-        """Register a new user and retunr an valid Access Token"""
+        """Register a new user and return a valid Access Token"""
 
         request_data = auth_reqparser.parse_args()
         email = request_data.get("email")
