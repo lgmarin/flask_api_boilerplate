@@ -17,13 +17,13 @@ class Widget(db.Model):
 
     __tablename__ = "widget"
 
-    id = db.Column(db.Integer, primary_key=True, autoicrement=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
     info_url = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=utc_now)
-    dadline = db.Column(db.DateTime)
+    deadline = db.Column(db.DateTime)
 
-    owner_id = db.Column(db.Integer, db.ForeignKey("site_user.id"), nullable=False)
+    owner_id = db.Column(db.Integer, db.ForeignKey("app_user.id"), nullable=False)
     owner = db.relationship("User", backref=db.backref("widgets"))
 
     def __repr__(self):
