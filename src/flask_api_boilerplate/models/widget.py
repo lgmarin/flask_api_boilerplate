@@ -1,5 +1,5 @@
 from flask_api_boilerplate import db
-from flask_api_boilerplate.utils import utc_now
+from flask_api_boilerplate.utils.datetime import utc_now
 
 
 class Widget(db.Model):
@@ -12,3 +12,9 @@ class Widget(db.Model):
     info_url = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=utc_now)
     dadline = db.Column(db.DateTime)
+
+    owner_id = db.Column(db.Integer, db.ForeignKey("site_user.id"), nullable=False)
+    owner = db.relationship("User", backref=db.backref("widgets"))
+
+    def __repr__(self):
+        return f"<Widget name={self.name}, info_url={self.info_url}"
