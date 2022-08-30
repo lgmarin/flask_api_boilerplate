@@ -30,6 +30,7 @@ def test_auth_user(client, db):
 
 def test_auth_register_invalid_email(client):
     invalid_email = "first last"
+
     response = register_user(client, email=invalid_email, password=PASSWORD)
     assert response.status_code == HTTPStatus.BAD_REQUEST
     assert "message" in response.json and response.json["message"] == BAD_REQUEST
@@ -37,6 +38,6 @@ def test_auth_register_invalid_email(client):
     assert "expires_in" not in response.json
     assert "access_token" not in response.json
     assert "errors" in response.json
-    # assert "password" not in response.json["errors"]
-    # assert "email" in response.json["errors"]
-    # assert response.json["errors"]["email"] == f"{invalid_email} is not a valid email"
+    assert "password" not in response.json["errors"]
+    assert "email" in response.json["errors"]
+    assert response.json["errors"]["email"] == f"{invalid_email} is not a valid email"
