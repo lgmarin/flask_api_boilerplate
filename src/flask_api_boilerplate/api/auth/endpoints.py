@@ -38,7 +38,7 @@ class RegisterUser(Resource):
         return process_registration_request(email, password)
 
 
-@auth_namespace.route("/login", endpoint="login_user")
+@auth_namespace.route("/login", endpoint="auth_login")
 class LoginUser(Resource):
     """Handles HTTP Requests to /api/v1/auth/login"""
 
