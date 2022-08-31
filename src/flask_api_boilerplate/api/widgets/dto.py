@@ -1,5 +1,5 @@
 import re
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timezone, time
 
 from dateutil import parser
 from flask_restx.inputs import URL
@@ -36,3 +36,36 @@ def future_date_from_string(date_str: str):
             f"The date {parsed_date.strftime(DATE_MONTH_NAME)} is older than "
             f"{datetime.now().strftime(DATE_MONTH_NAME)}. You must enter a date in the future. "
         )
+
+    deadline = datetime.combine(parsed_date.date(), time.max)
+    deadline_utc = make_tzaware(deadline, use_tz=timezone.utc)
+
+    return deadline_utc
+
+
+# Parser
+widget_req_parser = RequestParser(bundle_errors=True)
+widget_req_parser.add_argument(
+    "name",
+    type=widget_name,
+    location="form",
+    required=True,
+    nullable=False,
+    case_sensitive=True,
+)
+
+widget_req_parser.add_argument(
+    "info_url",
+    type=URL(schemes=["http", "https"]),
+    location="form",
+    required=True,
+    nullable=False,
+)
+
+widget_req_parser.add_argument(
+    "deadline",
+    type=future_date_from_string,
+    location="form",
+    required=True,
+    nullable=False,
+)
