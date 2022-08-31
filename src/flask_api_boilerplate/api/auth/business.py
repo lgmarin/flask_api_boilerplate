@@ -24,7 +24,7 @@ def process_registration_request(email: str, password: str) -> Response:
     )
 
 
-def process_login_request(email: str, password: str):
+def process_login_request(email: str, password: str) -> Response:
     user = User.find_by_email(email)
 
     if not user or not user.check_password(password):
