@@ -37,3 +37,21 @@ def token_required(f):
         return f(*args, **kwargs)
 
     return decorated
+
+
+def admin_required(f):
+    """Execute function if request contains valid access token AND user is ADMIN"""
+
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token_payload = _check_access_token(admin_only=True)
+
+        if not token_payload["admin"]:
+            raise ApiForbidden()
+
+        for name, val in token_payload.items():
+            setattr(decorated, name, val)
+
+        return f(*args, **kwargs)
+
+    return decorated
