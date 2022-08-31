@@ -30,3 +30,10 @@ def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token_payload = _check_access_token(admin_only=False)
+
+        for name, val in token_payload.items():
+            setattr(decorated, name, val)
+
+        return f(*args, **kwargs)
+
+    return decorated
