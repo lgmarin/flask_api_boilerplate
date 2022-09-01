@@ -4,6 +4,11 @@ from flask import current_app, jsonify, Response
 from flask_restx import abort
 
 from flask_api_boilerplate import db
+from flask_api_boilerplate.api.auth.decorators import token_required
+from flask_api_boilerplate.utils.datetime import (
+    remaining_fromtimestamp,
+    format_timespan_digits,
+)
 from flask_api_boilerplate.models.user import User
 
 
@@ -43,6 +48,18 @@ def process_login_request(email: str, password: str) -> Response:
     )
 
 
+@token_required
+def get_logged_in_user() -> User:
+    public_id = get_logged_in_user.public_id
+    user = User.find_by_public_id(public_id)
+    expires_at = get_logged_in_user.expires_at
+
+    user.token_expires_in = format_timespan_digits(remaining_fromtimestamp(expires_at))
+
+    return user
+
+
+### Private methods
 def _get_token_expire_time() -> int:
     token_age_h = current_app.config.get("TOKEN_EXPIRE_HOURS")
     token_age_m = current_app.config.get("TOKEN_EXPIRE_MINUTES")

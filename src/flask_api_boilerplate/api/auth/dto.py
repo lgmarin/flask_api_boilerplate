@@ -12,7 +12,7 @@ auth_req_parser.add_argument(
 auth_req_parser.add_argument(
     name="password", type=str, location="form", required=True, nullable=False
 )
-
+# flask_restx API Model for User Model
 user_model = Model(
     "User",
     {
@@ -20,6 +20,6 @@ user_model = Model(
         "public_id": String,
         "admin": Boolean,
         "registered_on": String(attribute="registered_on_str"),
-        "token_expires_on": String,
+        "token_expires_in": String,
     },
 )
