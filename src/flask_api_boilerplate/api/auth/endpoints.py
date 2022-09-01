@@ -2,16 +2,18 @@ from http import HTTPStatus
 
 from flask_restx import Namespace, Resource
 
-from flask_api_boilerplate.api.auth.dto import auth_req_parser
+from flask_api_boilerplate.api.auth.dto import auth_req_parser, user_model
 from flask_api_boilerplate.api.auth.business import (
     process_registration_request,
     process_login_request,
+    get_logged_in_user,
 )
 
 auth_namespace = Namespace(
     name="auth",
     validate=True,
 )
+auth_namespace.models[user_model.name] = user_model
 
 
 @auth_namespace.route("/register", endpoint="auth_register")
@@ -59,3 +61,19 @@ class LoginUser(Resource):
         password = request_data.get("password")
 
         return process_login_request(email, password)
+
+
+@auth_namespace.route("/user", endoint="auth_user")
+class GetUser(Resource):
+    """Handles HTTP requests to URL /api/v1/auth/user"""
+
+    @auth_namespace.doc(security="Bearer")
+    @auth_namespace.response(int(HTTPStatus.OK), "Token is currently valid.", user_model)
+    @auth_namespace.response(int(HTTPStatus.BAD_REQUEST), "Validation error.")
+    @auth_namespace.response(
+        int(HTTPStatus.UNAUTHORIZED), "Token is invalid or expired."
+    )
+    @auth_namespace.marshal_with(user_model)
+    def get(self):
+        """Validate acces token and return user info."""
+        return get_logged_in_user()

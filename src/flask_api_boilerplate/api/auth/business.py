@@ -59,7 +59,7 @@ def get_logged_in_user() -> User:
     return user
 
 
-### Private methods
+# Private methods
 def _get_token_expire_time() -> int:
     token_age_h = current_app.config.get("TOKEN_EXPIRE_HOURS")
     token_age_m = current_app.config.get("TOKEN_EXPIRE_MINUTES")
