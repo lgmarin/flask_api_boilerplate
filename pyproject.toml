@@ -17,5 +17,7 @@ exclude =  '''
     | build
     | dist
     | venv
+    | .venv
+    | migrations
 )/
 '''
