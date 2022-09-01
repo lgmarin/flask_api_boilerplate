@@ -7,6 +7,7 @@ from flask_api_boilerplate.api.auth.business import (
     process_registration_request,
     process_login_request,
     get_logged_in_user,
+    process_logout_request,
 )
 
 auth_namespace = Namespace(
@@ -77,3 +78,23 @@ class GetUser(Resource):
     def get(self):
         """Validate acces token and return user info."""
         return get_logged_in_user()
+
+
+@auth_namespace.route("/logout", endpoint="auth_logout")
+class LogoutUser(Resource):
+    """Handles HTTP requests to URL: /api/v1/auth/logout"""
+
+    @auth_namespace.doc(security="Bearer")
+    @auth_namespace.response(
+        int(HTTPStatus.OK), "Log out succeeded, token is no longer valid."
+    )
+    @auth_namespace.response(int(HTTPStatus.BAD_REQUEST), "Validation error.")
+    @auth_namespace.response(
+        int(HTTPStatus.UNAUTHORIZED), "Token is invalid or expired."
+    )
+    @auth_namespace.response(
+        int(HTTPStatus.INTERNAL_SERVER_ERROR), "Internal server error."
+    )
+    def post(self):
+        """Add token to blacklist, logout the current user."""
+        return process_logout_request()
