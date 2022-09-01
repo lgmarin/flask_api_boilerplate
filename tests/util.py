@@ -19,3 +19,9 @@ def login_user(test_client, email=EMAIL, password=PASSWORD):
         data={"email": f"{email}", "password": f"{password}"},
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
+
+
+def get_user(test_client, access_token):
+    return test_client.get(
+        url_for("api.auth_user"), headers={"Authorization": f"Bearer {access_token}"}
+    )
