@@ -3,6 +3,7 @@ from flask import url_for
 EMAIL = "testuser@testmail.com"
 PASSWORD = "123456789"
 BAD_REQUEST = "Input payload validation failed"
+WWW_AUTH_NO_TOKEN = 'Bearer realm="registered_users@mydomain.com"'
 
 
 def register_user(test_client, email=EMAIL, password=PASSWORD):

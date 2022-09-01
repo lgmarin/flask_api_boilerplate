@@ -7,7 +7,7 @@ SUCCESS = "successfully registered"
 EMAIL_ALREADY_EXISTS = f"{EMAIL} already in use!"
 
 
-def test_login(client, db):
+def test_auth_register_login(client, db):
     register_user(client)
 
     response = login_user(client)
@@ -15,7 +15,7 @@ def test_login(client, db):
     assert response.status_code == HTTPStatus.OK
 
 
-def test_auth_user(client, db):
+def test_auth_register(client, db):
     response = register_user(client, email=EMAIL, password=PASSWORD)
 
     assert response.status_code == HTTPStatus.CREATED
