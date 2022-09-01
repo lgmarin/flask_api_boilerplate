@@ -10,6 +10,7 @@ from flask_api_boilerplate.utils.datetime import (
     format_timespan_digits,
 )
 from flask_api_boilerplate.models.user import User
+from flask_api_boilerplate.models.token_blacklist import BlacklistedToken
 
 
 def process_registration_request(email: str, password: str) -> Response:
@@ -57,6 +58,19 @@ def get_logged_in_user() -> User:
     user.token_expires_in = format_timespan_digits(remaining_fromtimestamp(expires_at))
 
     return user
+
+
+@token_required
+def process_logout_request():
+    access_token = process_logout_request.token
+    expires_at = process_logout_request.expires_at
+    blacklisted_token = BlacklistedToken(access_token, expires_at)
+
+    db.session.add(blacklisted_token)
+    db.session.commit()
+
+    response_dict = dict(status="success", message="successfully logged out.")
+    return response_dict, HTTPStatus.OK
 
 
 # Private methods
