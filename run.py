@@ -4,13 +4,20 @@ import click
 from flask_api_boilerplate import create_app, db
 from flask_api_boilerplate.models.user import User
 from flask_api_boilerplate.models.widget import Widget
+from flask_api_boilerplate.models.token_blacklist import BlacklistedToken
+
 
 app = create_app(os.getenv("FLASK_ENV", "development"))
 
 
 @app.shell_context_processor
 def shell():
-    return {"db": db, "User": User, Widget: "Widget"}
+    return {
+        "db": db,
+        "User": User,
+        "BlacklistedToken": BlacklistedToken,
+        "Widget": Widget,
+    }
 
 
 @app.cli.command("add-user", short_help="Add a new user")
