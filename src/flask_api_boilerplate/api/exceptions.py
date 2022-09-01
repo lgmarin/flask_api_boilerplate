@@ -23,7 +23,7 @@ class ApiUnauthorized(Unauthorized):
             self, description=description, response=None, www_authenticate=None
         )
 
-    def get_headers(self, environ):
+    def get_headers(self, environ, scope):
         return [
             ("Content-Type", "text/html"),
             ("WWW-Authenticate", self.www_auth_value),

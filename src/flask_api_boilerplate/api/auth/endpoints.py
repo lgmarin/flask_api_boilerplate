@@ -63,7 +63,7 @@ class LoginUser(Resource):
         return process_login_request(email, password)
 
 
-@auth_namespace.route("/user", endoint="auth_user")
+@auth_namespace.route("/user", endpoint="auth_user")
 class GetUser(Resource):
     """Handles HTTP requests to URL /api/v1/auth/user"""
 
