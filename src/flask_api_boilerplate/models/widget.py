@@ -56,5 +56,5 @@ class Widget(db.Model):
         return timedelta_str if not self.deadline_passed else "No time remaining"
 
     @classmethod
-    def find_by_name(cls, name):
+    def find_by_name(cls, name: str):
         return cls.query.filter_by(name=name).first()
