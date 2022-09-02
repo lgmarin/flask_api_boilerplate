@@ -16,8 +16,8 @@ class WidgetList(Resource):
 
     @widget_namespace.doc(security="Bearer")
     @widget_namespace.response(int(HTTPStatus.CREATED), "Added new widget.")
-    @widget_namespace.response(int(HTTPStatus.CREATED), "Admnistrator token required.")
-    @widget_namespace.response(int(HTTPStatus.CREATED), "Widget name already exists.")
+    @widget_namespace.response(int(HTTPStatus.FORBIDDEN), "Admnistrator token required.")
+    @widget_namespace.response(int(HTTPStatus.CONFLICT), "Widget name already exists.")
     @widget_namespace.expect(create_widget)
     def post(self):
         """Create a widget."""
