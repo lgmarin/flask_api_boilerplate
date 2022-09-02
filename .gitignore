@@ -131,5 +131,3 @@ src/flask_api_boilerplate/flask_api_tutorial_test.db
 src/flask_api_boilerplate/flask_api_tutorial_dev.db
 
 .idea
-.vscode
-.vscode/launch.json
