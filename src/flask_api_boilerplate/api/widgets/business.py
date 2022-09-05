@@ -94,14 +94,14 @@ def _pagination_nav_links(pagination: Pagination) -> dict:
     return nav_links
 
 
-def _pagination_nav_header_links(pagination: Pagination) -> dict:
+def _pagination_nav_header_links(pagination: Pagination) -> str:
     """Generate navigation headers for the pagination response
 
     Args:
         pagination (Pagination): Pagination object to process
 
     Returns:
-        dict: Dict containing the headers to merge into HTTP response
+        str: String containing the headers to merge into HTTP response
     """
     url_dict = _pagination_nav_links(pagination)
     link_header = ""
