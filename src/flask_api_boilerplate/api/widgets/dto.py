@@ -2,7 +2,7 @@ import re
 from datetime import date, datetime, timezone, time
 
 from dateutil import parser
-from flask_restx.inputs import URL
+from flask_restx.inputs import URL, positive
 from flask_restx.reqparse import RequestParser
 
 from flask_api_boilerplate.utils.datetime import make_tzaware, DATE_MONTH_NAME
@@ -68,4 +68,11 @@ widget_req_parser.add_argument(
     location="form",
     required=True,
     nullable=False,
+)
+
+
+pagination_req_parser = RequestParser(bundle_errors=True)
+pagination_req_parser.add_argument("page", type=positive, required=False, default=1)
+pagination_req_parser.add_argument(
+    "per_page", type=positive, required=False, default=10, choices=[5, 10, 25, 50]
 )
