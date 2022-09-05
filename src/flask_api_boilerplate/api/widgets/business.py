@@ -92,3 +92,19 @@ def _pagination_nav_links(pagination: Pagination) -> dict:
     nav_links["last"] = url_for("api.widget_list", page=last_page, per_page=per_page)
 
     return nav_links
+
+
+def _pagination_nav_header_links(pagination: Pagination) -> dict:
+    """Generate navigation headers for the pagination response
+
+    Args:
+        pagination (Pagination): Pagination object to process
+
+    Returns:
+        dict: Dict containing the headers to merge into HTTP response
+    """
+    url_dict = _pagination_nav_links(pagination)
+    link_header = ""
+    for rel, url in url_dict.items():
+        link_header += f'<{url}>; rel="{rel}", '
+    return link_header.strip().strip(",")

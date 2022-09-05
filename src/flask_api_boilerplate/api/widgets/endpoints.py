@@ -4,6 +4,7 @@ from flask_restx import Namespace, Resource
 from flask_api_boilerplate.api.widgets.dto import widget_req_parser
 from flask_api_boilerplate.api.widgets.business import create_widget
 
+
 widget_namespace = Namespace(name="widgets", validate=True)
 
 
