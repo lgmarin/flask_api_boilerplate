@@ -61,6 +61,14 @@ def retrieve_widget_list(page: int, per_page: int) -> Response:
     return response
 
 
+@token_required
+def retrieve_widget(name: str) -> Response:
+    return Widget.query.filter_by(
+        name=name.lower().first_or_404(description=f"{name} not found in database.")
+    )
+
+
+# Private Methods
 def _pagination_nav_links(pagination: Pagination) -> dict:
     """Generate navigation links for the pagination response
 
