@@ -5,7 +5,7 @@ from flask_api_boilerplate.api.exceptions import ApiUnauthorized, ApiForbidden
 from flask_api_boilerplate.models.user import User
 
 
-def token_required(f: function) -> function:
+def token_required(f):
     """Executes function if requeste contains valid access token."""
 
     @wraps(f)
@@ -20,7 +20,7 @@ def token_required(f: function) -> function:
     return decorated
 
 
-def admin_required(f: function) -> function:
+def admin_required(f):
     """Execute function if request contains valid access token AND user is ADMIN"""
 
     @wraps(f)

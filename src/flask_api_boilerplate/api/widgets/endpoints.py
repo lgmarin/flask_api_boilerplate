@@ -12,6 +12,7 @@ from flask_api_boilerplate.api.widgets.dto import (
 from flask_api_boilerplate.api.widgets.business import (
     create_widget,
     retrieve_widget_list,
+    retrieve_widget,
 )
 
 
@@ -28,7 +29,7 @@ widget_namespace.models[pagination_model.name] = pagination_model
 @widget_namespace.response(
     int(HTTPStatus.INTERNAL_SERVER_ERROR), "Internal server error."
 )
-class WidgetList(Resource):
+class Widgets(Resource):
     """Handles HTTP requests to URL: /widgets"""
 
     @widget_namespace.doc(security="Bearer")
@@ -55,3 +56,23 @@ class WidgetList(Resource):
 
         widget_dict = widget_req_parser.parse_args()
         return create_widget(widget_dict)
+
+
+@widget_namespace.route("/<name>", endpoint="widget")
+@widget_namespace.param("name", "Widget name")
+@widget_namespace.response(int(HTTPStatus.BAD_REQUEST), "Validation error.")
+@widget_namespace.response(int(HTTPStatus.NOT_FOUND), "Widget not found.")
+@widget_namespace.response(int(HTTPStatus.UNAUTHORIZED), "Unauthorized.")
+@widget_namespace.response(
+    int(HTTPStatus.INTERNAL_SERVER_ERROR), "Internal server error."
+)
+class Widget(Resource):
+    """Handles HTTP request to URL: /widgets/{name}"""
+
+    @widget_namespace.doc(security="Bearer")
+    @widget_namespace.response(int(HTTPStatus.OK), "Retrieved widget.", widget_model)
+    @widget_namespace.marshal_with(widget_model)
+    def get(self, name: str):
+        """Retrieve a single widget by it's name."""
+
+        return retrieve_widget(name)
