@@ -73,6 +73,11 @@ widget_req_parser.add_argument(
 )
 
 
+# Update Request Parser
+update_widget_req_parser = widget_req_parser.copy()
+update_widget_req_parser.remove_argument("name")
+
+
 pagination_req_parser = RequestParser(bundle_errors=True)
 pagination_req_parser.add_argument("page", type=positive, required=False, default=1)
 pagination_req_parser.add_argument(
