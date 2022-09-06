@@ -7,7 +7,7 @@ from flask_api_boilerplate import db
 from flask_api_boilerplate.models.user import User
 from flask_api_boilerplate.models.widget import Widget
 from flask_api_boilerplate.api.auth.decorators import admin_required, token_required
-from flask_api_boilerplate.api.widgets.dto import pagination_model
+from flask_api_boilerplate.api.widgets.dto import pagination_model, widget_name
 
 
 @admin_required
@@ -63,6 +63,14 @@ def retrieve_widget_list(page: int, per_page: int) -> Response:
 
 @token_required
 def retrieve_widget(name: str) -> Response:
+    """Retrieve a single widget based on it's name.
+
+    Args:
+        name (str): Widget name
+
+    Returns:
+        Response: HTTP Response containing JSON object
+    """
     return Widget.query.filter_by(
         name=name.lower().first_or_404(description=f"{name} not found in database.")
     )
@@ -70,6 +78,14 @@ def retrieve_widget(name: str) -> Response:
 
 @admin_required
 def delete_widget(name: str) -> Response:
+    """Delete a single object by name
+
+    Args:
+        name (str): Widget name
+
+    Returns:
+        Response: HTTP Response containing JSON object
+    """
     widget = Widget.query.filter_by(name=name.lower()).first_or_404(
         description=f"{name} not found in database."
     )
@@ -77,6 +93,39 @@ def delete_widget(name: str) -> Response:
     db.session.commit()
 
     return "", HTTPStatus.NO_CONTENT
+
+
+@token_required
+def update_widget(name: str, widget_dict: dict) -> Response:
+    """Update Widget by the provided name
+
+    Args:
+        name (str): Widget name
+        widget_dict (dict): Widget dict containing the new data to update
+
+    Returns:
+        Response: HTTP Response containing JSON object
+    """
+    widget = Widget.query.find_by_name(name.lower())
+
+    if widget:
+        for k, v in widget_dict.items():
+            setattr(widget, k, v)
+
+        db.session.commit()
+        message = f"'{name}' was successfully updated!"
+        response_dict = dict(status="success", message=message)
+
+        return response_dict, HTTPStatus.OK
+
+    try:
+        valid_name = widget_name(name.lower())
+    except ValueError as e:
+        abort(HTTPStatus.BAD_REQUEST, str(e), status="fail")
+
+    widget_dict["name"] = valid_name
+
+    return create_widget(widget_dict)
 
 
 # Private Methods
