@@ -13,6 +13,7 @@ from flask_api_boilerplate.api.widgets.business import (
     create_widget,
     retrieve_widget_list,
     retrieve_widget,
+    delete_widget,
 )
 
 
@@ -76,3 +77,13 @@ class Widget(Resource):
         """Retrieve a single widget by it's name."""
 
         return retrieve_widget(name)
+
+    @widget_namespace.doc(security="Bearer")
+    @widget_namespace.response(int(HTTPStatus.NO_CONTENT), "Widget deleted.")
+    @widget_namespace.response(
+        int(HTTPStatus.FORBIDDEN), "Administrator token required."
+    )
+    def delete(self, name: str):
+        """Delete a widget by it's name."""
+
+        return delete_widget(name)
