@@ -68,6 +68,18 @@ def retrieve_widget(name: str) -> Response:
     )
 
 
+@admin_required
+def delete_widget(name: str) -> Response:
+    widget = Widget.query.filter_by(name=name.lower()).first_or_404(
+        description=f"{name} not found in database."
+    )
+
+    db.session.delete(widget)
+    db.session.commit()
+
+    return "", HTTPStatus.NO_CONTENT
+
+
 # Private Methods
 def _pagination_nav_links(pagination: Pagination) -> dict:
     """Generate navigation links for the pagination response
