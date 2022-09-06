@@ -50,7 +50,6 @@ def retrieve_widget_list(page: int, per_page: int) -> Response:
     Returns:
         Response: HTTP Response containing the JSON data
     """
-
     pagination = Widget.query.paginate(page, per_page, error_out=False)
     response_data = marshal(pagination, pagination_model)
     response_data["links"] = _pagination_nav_links(pagination)
