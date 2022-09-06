@@ -5,6 +5,39 @@ from flask_api_boilerplate.api.exceptions import ApiUnauthorized, ApiForbidden
 from flask_api_boilerplate.models.user import User
 
 
+def token_required(f: function) -> function:
+    """Executes function if requeste contains valid access token."""
+
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token_payload = _check_access_token(admin_only=False)
+
+        for name, val in token_payload.items():
+            setattr(decorated, name, val)
+
+        return f(*args, **kwargs)
+
+    return decorated
+
+
+def admin_required(f: function) -> function:
+    """Execute function if request contains valid access token AND user is ADMIN"""
+
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token_payload = _check_access_token(admin_only=True)
+
+        if not token_payload["admin"]:
+            raise ApiForbidden()
+
+        for name, val in token_payload.items():
+            setattr(decorated, name, val)
+
+        return f(*args, **kwargs)
+
+    return decorated
+
+
 def _check_access_token(admin_only: bool):
     token = request.headers.get("Authorization")
 
@@ -22,36 +55,3 @@ def _check_access_token(admin_only: bool):
         )
 
     return result.value
-
-
-def token_required(f):
-    """Executes function if requeste contains valid access token."""
-
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        token_payload = _check_access_token(admin_only=False)
-
-        for name, val in token_payload.items():
-            setattr(decorated, name, val)
-
-        return f(*args, **kwargs)
-
-    return decorated
-
-
-def admin_required(f):
-    """Execute function if request contains valid access token AND user is ADMIN"""
-
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        token_payload = _check_access_token(admin_only=True)
-
-        if not token_payload["admin"]:
-            raise ApiForbidden()
-
-        for name, val in token_payload.items():
-            setattr(decorated, name, val)
-
-        return f(*args, **kwargs)
-
-    return decorated
